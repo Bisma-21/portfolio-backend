@@ -18,7 +18,7 @@ app.post("/send-mail", async (req, res) => {
       phone: req.body.phone,
       message: req.body.message,
     };
-    console.log(body);
+    // console.log(body);
     if (body.name === " ") {
       return res.status(400).json("Name cannot be just a space");
     }
