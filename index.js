@@ -18,8 +18,42 @@ app.post("/send-mail", async (req, res) => {
       phone: req.body.phone,
       message: req.body.message,
     };
+    console.log(body);
+    if (body.name === " ") {
+      return res.status(400).json("Name cannot be just a space");
+    }
+    if (body.name === "") {
+      return res.status(400).json("Name cannot be empty");
+    }
 
-    // Create a transporter using SMTP
+    if (body.name.trim() === "") {
+      return res.status(400).json("Name cannot be empty");
+    }
+    if (body.name.length < 3) {
+      return res.status(400).json("Name must have at least 3 characters");
+    }
+
+    if (!/^[A-Za-z]+$/.test(body.name)) {
+      return res
+        .status(400)
+        .json("Name must contain only alphabetic characters");
+    }
+    const emailPattern = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$/;
+    if (!emailPattern.test(body.email)) {
+      return res.status(400).json("Invalid email format");
+    }
+    const phonePattern = /^[0-9]{10}$/; // Assuming a 10-digit phone number format
+    if (!phonePattern.test(body.phone)) {
+      return res.status(400).json("Invalid phone number format");
+    }
+    if (body.message.trim() === "") {
+      return res.status(400).json("Message cannot be empty");
+    }
+
+    if (body.message.length < 30) {
+      return res.status(400).json("Message must have at least 30 characters");
+    }
+    //  //Create a transporter using SMTP
     const transporter = nodemailer.createTransport({
       service: "gmail",
       host: "smtp.gmail.com",
